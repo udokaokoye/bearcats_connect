@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // echo json_encode($id);
             echo json_encode("Completed");
         } else {
-            echo json_encode("FALSE");
+            echo json_encode("FALSWE");
         }
 
 } else {

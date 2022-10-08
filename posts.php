@@ -50,15 +50,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = mysqli_query($link, $query);
             $postId = mysqli_fetch_array($result)[0];
 
+            $serializedImages = serialize($allImages);
+
             // ! PERFORM NEXT QUERY TO INSERT DATA INTO THE DATABASE.
-        foreach ($allImages as $key => $value) {
+        // foreach ($allImages as $key => $value) {
             $query = "INSERT INTO `post_media` (`post_id`, `media_url`) VALUES (
                 '".mysqli_real_escape_string( $link, $postId )."', 
-                '".mysqli_real_escape_string( $link, $allImages[$key] )."'
+                '".mysqli_real_escape_string( $link, $serializedImages )."'
             )";
 
             mysqli_query($link, $query);
-        }
+        // }
             // $query = "INSERT INTO `post_media` (`post_id`, `media_url`) VALUES (
             //     '".mysqli_real_escape_string( $link, $postId )."', 
             //     '".mysqli_real_escape_string( $link, $allImages[0] )."'
@@ -66,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // echo json_encode($id);
             echo json_encode("Completed");
         } else {
-            echo json_encode("FALSWE");
+            echo json_encode("FALSE");
         }
 
 } else {

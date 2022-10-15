@@ -25,13 +25,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // $row = mysqli_fetch_assoc($result);
 
     // !To GET EVERYTING WITH THE MEDIA 
-    $query= "SELECT * FROM `posts` INNER JOIN post_media ON id=post_media.post_id WHERE `user_id` IN ('". $following . "');";
+    $query= "SELECT posts.id, posts.user_id, `caption`, `location`, `type`, `createdDate`, `media_url`, `orientation` FROM `posts` INNER JOIN post_media ON posts.id=post_media.post_id WHERE posts.user_id IN ('". $following . "');";
     $result = mysqli_query($link, $query);
     $usersFeed = [];
-    while ($row = mysqli_fetch_object($result)) {
-        array_push($usersFeed, $row);
+    while ($row = mysqli_fetch_assoc($result)) {
+        array_push($usersFeed, [
+            'id' => $row['id'],
+            'user_id' => $row['user_id'],
+            'caption' => $row['caption'],
+            'location' => $row['location'],
+            'type' => $row['type'],
+            'createdDate' => $row['createdDate'],
+            'media_url' => unserialize($row['media_url']),
+            'orientations' => unserialize($row['orientation'])
+            // 'comment' => $row['comments']
+            // ! LATER WE WILL INCLUDE THE NUMBER OF COMMENTS ON THE POST AND THE LATEST COMMENT.
+        ]);
     }
-    $userfeed2 = $usersFeed;
 
-    echo json_encode(array_unique(array_merge($usersFeed, $userfeed2), SORT_REGULAR));
+    echo json_encode($usersFeed);
 }

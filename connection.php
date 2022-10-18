@@ -1,6 +1,6 @@
 
 <?php
-define( 'URLROOT', 'http://localhost/bearcats_connect' );
+define( 'URLROOT', 'http://192.168.1.51/bearcats_connect/' );
 header( 'Access-Control-Allow-Origin: *' );
 header( 'Access-Control-Allow-Methods: GET, POST, OPTIONS' );
 header( 'Access-Control-Allow-Headers: *' );

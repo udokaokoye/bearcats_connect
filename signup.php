@@ -1,6 +1,6 @@
 <?php
 include './connection.php';
-
+include './jwt.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_GET['continueSignUp']) && $_GET['continueSignUp'] == 'true') {
@@ -12,11 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $coverPicture = null;
 
         if (isset($_FILES['profile_picture'])) {
-            $path = 'Images/';
+            $path = 'Images/profile_images' . DIRECTORY_SEPARATOR;
                 $file_name = str_replace(' ', '', $_FILES['profile_picture']['name']);
                 $file_tmp = $_FILES['profile_picture']['tmp_name'];
                 $file_type = $_FILES['profile_picture']['type'];
-                $file = $path . "pp_" . $file_name;
+                $file = $path . "pp_" . $userId . "_" . $file_name;
                 if ( move_uploaded_file( $file_tmp, $file ) ) {
                     // $error = false;
                     $profilePic = URLROOT . $file;
@@ -24,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (isset($_FILES['cover_picture'])) {
-            $path = 'Images/';
+            $path = 'Images/cover_images/';
                 $file_name = str_replace(' ', '', $_FILES['cover_picture']['name']);
                 $file_tmp = $_FILES['cover_picture']['tmp_name'];
                 $file_type = $_FILES['cover_picture']['type'];
-                $file = $path . "cc_" . $file_name;
+                $file = $path . "cc_" . $userId . "_" . $file_name;
                 if ( move_uploaded_file( $file_tmp, $file ) ) {
                     // $error = false;
                     $coverPicture = URLROOT . $file;
@@ -44,34 +44,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         if (mysqli_query($link, $query)) {
-            echo json_encode("SUCCESS UPDATING");
+            echo json_encode("UPDATED");
         } else {
-            echo json_encode("FAILED TO UPDATE");
+            echo json_encode("FAILED UPDATING");
         }
 
         return false;
-    }
-
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $email  = $_POST['email'];
-    $username = $_POST['username'];
-    $rawPassword = $_POST['password'];
-    $hashedPassword = password_hash($rawPassword, PASSWORD_BCRYPT);
-
-    $query = "INSERT INTO `users` (`firstName`, `lastName`, `username`, `email`, `password`) VALUES (
-        '".mysqli_real_escape_string( $link, $firstName )."', 
-        '".mysqli_real_escape_string( $link, $lastName )."', 
-        '".mysqli_real_escape_string( $link, $username )."', 
-        '".mysqli_real_escape_string( $link, $email )."', 
-        '".mysqli_real_escape_string( $link, $hashedPassword )."'
-    )";
-
-    if (mysqli_query($link, $query)) {
-        echo json_encode("SUCCESS");
     } else {
-        echo json_encode("FAILED");
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $email  = $_POST['email'];
+        $username = $_POST['username'];
+        $rawPassword = $_POST['password'];
+        $hashedPassword = password_hash($rawPassword, PASSWORD_BCRYPT);
+    
+        $query = "INSERT INTO `users` (`firstName`, `lastName`, `username`, `email`, `password`) VALUES (
+            '".mysqli_real_escape_string( $link, $firstName )."', 
+            '".mysqli_real_escape_string( $link, $lastName )."', 
+            '".mysqli_real_escape_string( $link, $username )."', 
+            '".mysqli_real_escape_string( $link, $email )."', 
+            '".mysqli_real_escape_string( $link, $hashedPassword )."'
+        )";
+    
+        if (mysqli_query($link, $query)) {
+            $query = "SELECT * from `users` WHERE `email`= '$email'";
+            $row = mysqli_fetch_assoc(mysqli_query($link, $query));
+            $token = generateJwt(
+                [
+                    'userId' => $row['id'],
+                    'fName' => $row['firstName'],
+                    'lName' => $row['lastName'],
+                    ]
+            );
+            
+            echo json_encode(["SUCCESS", $row['id'], $token]);
+        } else {
+            echo json_encode("FAILED");
+        }
     }
+ 
+
 
     // ! UPDATE DATABASE WITH OTHER USER INFO (MOBILE NUMBER PROFILE PICTURE AND MAJOR)
 

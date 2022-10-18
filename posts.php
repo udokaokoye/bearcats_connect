@@ -42,9 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-
-    // echo json_encode($_FILES['files']['name']);
-
     $query = "INSERT INTO `posts` (`user_id`, `caption`, `location`, `type`) VALUES (
         '" . mysqli_real_escape_string($link, $userId) . "', 
         '" . mysqli_real_escape_string($link, $caption) . "', 

@@ -15,6 +15,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo json_encode('User Found');
             }
         }
+
+        if ($helper == 'checkUsernamePassword') {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $response = [];
+
+            $query = "SELECT `email` FROM `users` WHERE email = '$email'";
+
+            $result = mysqli_query($link, $query);
+            if ($result->num_rows > 0) {
+                array_push($response, 'email found');
+            }
+
+            $query = "SELECT `username` FROM `users` WHERE username = '$username'";
+            $result = mysqli_query($link, $query);
+
+            if ($result->num_rows > 0) {
+                array_push($response, 'username found');
+            }
+
+            echo json_encode($response);
+
+        }
         
     } else {
         echo json_encode("Select Helper");

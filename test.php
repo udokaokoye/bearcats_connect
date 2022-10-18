@@ -1,5 +1,6 @@
 <?php
 // include './connection.php';
+include './jwt.php';
 
 // $testArr = [1,2,3,5];
 // $following = implode("', '", $testArr);
@@ -22,3 +23,5 @@
 // $res = array_reduce($usersFeed, "red");
 
 // print_r($usersFeed);
+
+echo generateJwt("Hello");

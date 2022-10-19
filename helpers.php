@@ -21,18 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = $_POST['email'];
             $response = [];
 
-            $query = "SELECT `email` FROM `users` WHERE email = '$email'";
+            $query = "SELECT `email` FROM `users` WHERE `email` = '$email'";
 
             $result = mysqli_query($link, $query);
             if ($result->num_rows > 0) {
-                array_push($response, 'email found');
+                array_push($response, true);
+            } else {
+                array_push($response, false);
             }
 
-            $query = "SELECT `username` FROM `users` WHERE username = '$username'";
+            $query = "SELECT `username` FROM `users` WHERE `username` = '$username'";
             $result = mysqli_query($link, $query);
 
             if ($result->num_rows > 0) {
-                array_push($response, 'username found');
+                array_push($response, true);
+            } else {
+                array_push($response, false);
             }
 
             echo json_encode($response);

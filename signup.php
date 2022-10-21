@@ -55,7 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'lName' => $row['lastName'],
                     'img' => $row['profile_picture'],
                     'username' => $row['username'],
-                    'major' => $row['major']
+                    'major' => $row['major'],
+                    'cover' => $row['cover_picture']
                     ]
             );
             

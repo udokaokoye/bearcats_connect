@@ -1,10 +1,16 @@
 <?php
     declare(strict_types=1);
-    include './connection.php';
+    // include './connection.php';
     use Firebase\JWT\JWT;
     
     require_once('./vendor/autoload.php');
 function verifyToken () {
+
+    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        header('HTTP/1.0 400 Bad Request');
+        echo 'Token not found in request';
+        exit;
+    }
 
 if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
     header('HTTP/1.0 400 Bad Request');
@@ -24,16 +30,16 @@ try {
     
     $token = JWT::decode($jwt, $secretKey, ['HS512']);
 }catch (\Firebase\JWT\ExpiredException $e) {
-    JWT::$leeway = 720000;
-             $decoded = (array) JWT::decode($jwt, $secretKey, ['HS512']);
-             // TODO: test if token is blacklisted
-             $decoded['iat'] = time();
-             $decoded['exp'] = time() + (60 * 60);
+    // JWT::$leeway = 720000;
+    //          $decoded = (array) JWT::decode($jwt, $secretKey, ['HS512']);
+    //          // TODO: test if token is blacklisted
+    //          $decoded['iat'] = time();
+    //          $decoded['exp'] = time() + (60 * 60);
 
-             return JWT::encode($decoded, $secretKey);
-    // header('HTTP/1.0 400 Bad Request');
-    // echo 'Expired';
-    // exit;
+    //          return JWT::encode($decoded, $secretKey);
+    header('HTTP/1.0 400 Bad Request');
+    echo 'Expired';
+    exit;
 } catch (\Exception $e) {
     echo var_dump($e);
 }

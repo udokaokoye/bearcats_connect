@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (file_exists($filepath)) {
                     $filepath = $upload_dir . $userId . "_" . time() . "_" . $file_name;
                     if (move_uploaded_file($file_tmpname, $filepath)) {
-                        array_push($allImages, $filepath);
+                        array_push($allImages, URLROOT . $filepath);
                     }
                     // else {                    
                     //     echo "Error uploading {$file_name} <br />";
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 } else {
                     if (move_uploaded_file($file_tmpname, $filepath)) {
-                        array_push($allImages, $filepath);
+                        array_push($allImages, URLROOT . $filepath);
                     }
                     // else {                    
                     //     echo "Error uploading {$file_name} <br />";

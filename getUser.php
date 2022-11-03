@@ -3,8 +3,8 @@ include './connection.php';
 require_once('./verifyToken.php');
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $userId = $_GET['userId'];
     verifyToken();
+    $userId = $_GET['userId'];
 
     $query = "SELECT * FROM `users` WHERE `id` = '$userId'";
     $result = mysqli_query($link, $query);

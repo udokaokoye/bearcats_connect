@@ -61,4 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         echo json_encode($usersFeed);
     }
+} else {
+    header('HTTP/1.0 500 Forbbiden Request');
+    echo 'Forbbiden';
+    exit; 
 }

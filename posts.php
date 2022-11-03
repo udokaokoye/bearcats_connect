@@ -1,8 +1,10 @@
 
 <?php
 include './connection.php';
+require_once('./verifyToken.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verifyToken();
     $userId = $_POST['userId'];
     $caption = $_POST['caption'];
     $location = $_POST['location'];
@@ -18,10 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $file_name = $_FILES['files']['name'][$key];
                 $file_size = $_FILES['files']['size'][$key];
                 $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
-                $filepath = $upload_dir . $userId . "_" . $file_name;
+                $filepath = $upload_dir . $userId . "_" . $file_name . ".jpeg";
+                // echo json_encode($file_name);
+                // return;
 
                 if (file_exists($filepath)) {
-                    $filepath = $upload_dir . $userId . "_" . time() . "_" . $file_name;
+                    $filepath = $upload_dir . $userId . "_" . time() . "_" . ".jpeg";
                     if (move_uploaded_file($file_tmpname, $filepath)) {
                         array_push($allImages, URLROOT . $filepath);
                     }

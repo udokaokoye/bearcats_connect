@@ -1,7 +1,8 @@
 <?php
 include './connection.php';
-
+require_once('./verifyToken.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verifyToken();
 
     // !To GET EVERYTING WITH THE MEDIA 
         if (isset($_GET['portion']) && $_GET['portion'] == 'following') {
@@ -67,4 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
             echo json_encode($usersFeed);
         }
+} else {
+    
 }

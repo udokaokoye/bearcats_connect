@@ -2,6 +2,9 @@
 <?php
 include './connection.php';
 require_once('./verifyToken.php');
+use Ramsey\Uuid\Uuid;
+
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     verifyToken();
@@ -25,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // return;
 
                 if (file_exists($filepath)) {
-                    $filepath = $upload_dir . $userId . "_" . time() . "_" . ".jpeg";
+                    $filepath = $upload_dir . $userId . "_" . Uuid::uuid4() . "_" . ".jpeg";
                     if (move_uploaded_file($file_tmpname, $filepath)) {
                         array_push($allImages, URLROOT . $filepath);
                     }

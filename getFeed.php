@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             $following = implode("', '", $data);
 
-            $query= "SELECT posts.id, posts.user_id, users.firstName, users.lastName, users.profile_picture, users.username, `caption`, `location`, `type`, `createdDate`, `media_url`, `orientation` FROM `posts` INNER JOIN post_media ON posts.id=post_media.post_id INNER JOIN users ON posts.user_id=users.id WHERE posts.user_id IN ('". $following . "') ORDER BY posts.id DESC";
+            $query= "SELECT posts.id, posts.user_id, users.firstName, users.lastName, users.profile_picture, users.username, `caption`, `location`, `type`, `createdDate`, `media_url`, `orientation` FROM `posts` LEFT JOIN post_media ON posts.id=post_media.post_id LEFT JOIN users ON posts.user_id=users.id WHERE posts.user_id IN ('". $following . "') ORDER BY posts.id DESC";
             $result = mysqli_query($link, $query);
             $usersFeed = [];
             while ($row = mysqli_fetch_assoc($result)) {
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
             echo json_encode($usersFeed);
         } else {
-            $query= "SELECT posts.id, posts.user_id, users.firstName, users.lastName, users.profile_picture, users.username, `caption`, `location`, `type`, `createdDate`, `media_url`, `orientation` FROM `posts` INNER JOIN post_media ON posts.id=post_media.post_id INNER JOIN users ON posts.user_id=users.id ORDER BY posts.id DESC";
+            $query= "SELECT posts.id, posts.user_id, users.firstName, users.lastName, users.profile_picture, users.username, `caption`, `location`, `type`, `createdDate`, `media_url`, `orientation` FROM `posts` LEFT JOIN post_media ON posts.id=post_media.post_id LEFT JOIN users ON posts.user_id=users.id ORDER BY posts.id DESC";
             $result = mysqli_query($link, $query);
             $usersFeed = [];
             while ($row = mysqli_fetch_assoc($result)) {

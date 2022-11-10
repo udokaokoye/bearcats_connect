@@ -83,7 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         // ! LATER WE WILL INCLUDE THE NUMBER OF COMMENTS ON THE POST AND THE LATEST COMMENT.
                     ],
 
-                    'comment' => $comment
+                    'comment' => [
+                        'comment' => $comment,
+                        'count' => count($comment)
+                    ]
                 ]
             );
         }

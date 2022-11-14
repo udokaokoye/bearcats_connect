@@ -1,10 +1,12 @@
 <?php
 include './connection.php';
+require_once('./verifyToken.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $post_id = $_POST['post_id'];
+    verifyToken();
+    $post_id = $_GET['pid'];
 
-    $query = "SELECT `user_id`, `post_id`, `comment`, `reply_id`, `dateCreated`, `firstName`, `lastName`, `username`, `profile_picture`, `major` FROM `comments` INNER JOIN `users` ON user_id=users.id WHERE `post_id`='$post_id'";
+    $query = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, `username`, `profile_picture`, `dateCreated`, `post_id`, comments.id AS id FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$post_id ORDER BY comments.id DESC";
     $result = mysqli_query($link, $query);
     $comments = [];
     while ($row = mysqli_fetch_assoc($result)) {

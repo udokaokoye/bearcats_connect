@@ -6,15 +6,15 @@
     require_once('./vendor/autoload.php');
 function verifyToken () {
 
-    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
-        header('HTTP/1.0 400 Bad Request');
-        echo 'Token not found in request';
-        exit;
-    }
+    // if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    //     header('HTTP/1.0 400 Bad Request');
+    //     echo json_encode('Token not found in request');
+    //     exit;
+    // }
 
 if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
     header('HTTP/1.0 400 Bad Request');
-    echo 'Token not found in request';
+    echo json_encode('Token not found in request');
     exit;
 }
 
@@ -22,6 +22,7 @@ $jwt = $matches[1];
 if (!$jwt) {
     // No token was able to be extracted from the authorization header
     header('HTTP/1.0 400 Bad Request');
+    echo json_encode("NO TOKEN");
     exit;
 }
 
@@ -38,7 +39,7 @@ try {
 
     //          return JWT::encode($decoded, $secretKey);
     header('HTTP/1.0 400 Bad Request');
-    echo 'Expired';
+    echo json_encode('Expired');
     exit;
 } catch (\Exception $e) {
     echo var_dump($e);

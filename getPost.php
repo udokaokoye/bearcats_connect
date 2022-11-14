@@ -59,18 +59,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ]);
         }
 
-        $query = "SELECT * FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$postId";
+        $query = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, `username`, `profile_picture`, `dateCreated`, `post_id`, comments.id AS commentID FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$postId ORDER BY comments.id DESC";
         $result = mysqli_query($link, $query);
         $comments = [];
         while ($row = mysqli_fetch_assoc($result)) {
             array_push($comments, [
-
+                'id' => $row['commentID'],
                 'comment' => $row['comment'],
                 'reply_id' => $row['reply_id'],
                 'firstName' => $row['firstName'],
                 'lastName' => $row['lastName'],
                 'username' => $row['username'],
+                'profile_picture' => $row['profile_picture'],
                 'date' => $row['dateCreated'],
+                'post_id' => $row['post_id']
                 
                 ]);
         }
@@ -89,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode([
             'post' => $usersFeed[0],
             'comments' => [
-                'comment' => $comments,
-                'commentCount' => count($comments)
+                'comments' => $comments,
+                'count' => count($comments)
             ],
             'reactions' => [
                 'count' => count($reactions),

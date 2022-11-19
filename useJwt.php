@@ -33,9 +33,12 @@ try {
     header('HTTP/1.0 400 Bad Request');
     echo 'Expired';
     exit;
+} catch (\Exception $e) {
+    header('HTTP/1.0 400 Bad Request');
+    echo var_dump($e);
 }
 $now = new DateTimeImmutable();
-$serverName = "http://localhost:3000/";
+// $serverName = "http://localhost:3000/";
 
 if (
     // $token->iss !== $serverName ||
@@ -47,4 +50,4 @@ if (
     exit;
 }
 
-echo json_encode($token->exp);
+// echo json_encode($token->exp);

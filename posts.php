@@ -15,6 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $postType = 'null';
     $upload_dir = 'Images' . DIRECTORY_SEPARATOR;
     $allImages = [];
+    // $taggedUsers = $_POST['taggedUsers'];
+
+    // if ($taggedUsers !== 'null') {
+    //     echo json_encode($taggedUsers);
+    // } else {
+    //     echo json_encode("Not found");
+    // }
+    // return;
 
     if (isset($_FILES['files']['error'])) {
         if (isset($_FILES['files'])) {
@@ -75,6 +83,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     )";
 
             mysqli_query($link, $query);
+        }
+
+        if (isset($_POST['taggedUsers'])) {
+            $tagUsers = $_POST['taggedUsers'];
+            // echo json_encode($_POST['taggedUsers']);
+            // return;
+            foreach ($tagUsers as $key => $value) {
+                $tagUserQuery = "INSERT INTO `postTags` (`post_id`, `user_id`, `tagged_userid`) VALUES (
+            '".mysqli_real_escape_string( $link, $postId )."', 
+            '".mysqli_real_escape_string( $link, $userId )."', 
+            '".mysqli_real_escape_string( $link, $value )."'
+                )";
+                mysqli_query($link, $tagUserQuery);
+            }
         }
         // }
         // $query = "INSERT INTO `post_media` (`post_id`, `media_url`) VALUES (

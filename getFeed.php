@@ -65,6 +65,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'post_id' => $commentRow['post_id']
                 ]);
             }
+
+                    // !SELECTING THE TAGGED USERS ON THAT POST
+                $tagUserQuery = "SELECT `firstName`, `lastName`, `username`, `tagged_userid` FROM postTags LEFT JOIN users on postTags.tagged_userid=users.id WHERE `post_id`=$id";
+                $tagUserResult = mysqli_query($link, $tagUserQuery);
+                $tags = [];
+                while ($taguserRow = mysqli_fetch_assoc($tagUserResult)) {
+                    array_push($tags, [
+                        'firstName' => $taguserRow['firstName'],
+                        'lastName' => $taguserRow['lastName'],
+                        'username' => $taguserRow['username'],
+                        'tagged_userid' => $taguserRow['tagged_userid']
+                        ]);
+                }
+
             array_push(
                 $usersFeed,
                 [
@@ -86,9 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     ],
 
                     'comments' => [
-                        'comment' => $comment,
+                        'comments' => $comment,
                         'count' => count($comment)
-                    ]
+                    ], 
+                    'tags' => $tags
                 ]
             );
         }

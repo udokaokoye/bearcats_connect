@@ -12,12 +12,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($result->num_rows > 0) {
         $row = mysqli_fetch_assoc($result);
         // ! Getting all the users followers
-        $query = "SELECT `following_user_id` FROM followers WHERE `followed_user_id`='$userId'";
+        $query = "SELECT `following_user_id`, `firstName` AS `followingUserFirstName`, `lastName` AS `followingUserLastName`, `major` AS `followingUserMajor`, `username` AS `followingUserUsername`, `profile_picture` AS `followingUserProfilePicture` FROM followers LEFT JOIN users on following_user_id=users.id WHERE `followed_user_id`='$userId'";
         $followersResult = mysqli_query($link, $query);
         $followersCount =  !empty($followersResult) ? $followersResult->num_rows :  0;
         $followers= [];
         while ($followerRow = mysqli_fetch_assoc($followersResult)) {
-            array_push($followers, $followerRow['following_user_id']);
+            array_push($followers, [
+                'id' => $followerRow['following_user_id'],
+                'firstName' => $followerRow['following_user_id'],
+                'lastName' => $followerRow['followingUserLastName'],
+                'firstName' => $followerRow['followingUserFirstName'],
+                'profile_picture' => $followerRow['followingUserProfilePicture'],
+                'major' => $followerRow['followingUserMajor'],
+                'username' => $followerRow['followingUserUsername'],
+            ]);
         }
         
         // !Getting all acounts the user is following

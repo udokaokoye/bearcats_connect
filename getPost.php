@@ -2,7 +2,7 @@
 include './connection.php';
 require_once('./verifyToken.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    verifyToken();
+    // verifyToken();
     // ! NOTE: In this code $usersFeed is used for every response even if we are returning just one post.
 
     if (isset($_GET['userId'])) {
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         while ($row = mysqli_fetch_assoc($result)) {
             $postId = $row['id'];
 
-            $commentQuery = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, `username`, `profile_picture`, `dateCreated`, `post_id`, comments.id AS commentID FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$postId";
+            $commentQuery = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, users.id AS UserId, `username`, `profile_picture`, `dateCreated`, `post_id`, comments.id AS commentID FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$postId";
             $commentResult = mysqli_query($link, $commentQuery);
             $comments = [];
             while ($commentRow = mysqli_fetch_assoc($commentResult)) {
@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     'firstName' => $commentRow['firstName'],
                     'lastName' => $commentRow['lastName'],
                     'username' => $commentRow['username'],
+                    'UserId' => $commentRow['UserId'],
                     'profile_picture' => $commentRow['profile_picture'],
                     'date' => $commentRow['dateCreated'],
                     'post_id' => $commentRow['post_id']

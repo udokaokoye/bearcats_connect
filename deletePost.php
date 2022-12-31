@@ -28,7 +28,11 @@ $query = "DELETE FROM post_media WHERE `post_id`='$pid'";
         if (mysqli_query($link, $query)) {
             $query = "DELETE FROM comments WHERE `post_id`='$pid'";
             if (mysqli_query($link, $query)) {
+
+                $query = "DELETE FROM postTags WHERE `post_id`='$pid'";
+            if (mysqli_query($link, $query)) {
             echo json_encode('SUCCESS');
+            }
             }
         } else {
             echo json_encode('FAILED');

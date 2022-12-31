@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         while ($row = mysqli_fetch_assoc($result)) {
             $id = $row['id'];
             $comment = [];
-            $commentQuery = $query = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, `username`, `profile_picture`, `dateCreated`,`post_id`, comments.id AS commentID FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$id";
+            $commentQuery = $query = "SELECT `comment`, `reply_id`, `firstName`, `lastName`, `username`, `profile_picture`, `dateCreated`,`post_id`, comments.id AS commentID, users.id AS UserId FROM comments LEFT JOIN users on comments.user_id=users.id WHERE `post_id`=$id";
             $commentQueryResult = mysqli_query($link, $commentQuery);
 
             while ($commentRow = mysqli_fetch_assoc($commentQueryResult)) {
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'firstName' => $commentRow['firstName'],
                 'lastName' => $commentRow['lastName'],
                 'username' => $commentRow['username'],
+                'UserId' => $commentRow['UserId'],
                 'profile_picture' => $commentRow['profile_picture'],
                 'date' => $commentRow['dateCreated'],
                 'post_id' => $commentRow['post_id']

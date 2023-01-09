@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         while ($followerRow = mysqli_fetch_assoc($followersResult)) {
             array_push($followers, [
                 'id' => $followerRow['following_user_id'],
-                'firstName' => $followerRow['following_user_id'],
+                // 'firstName' => $followerRow['following_user_id'],
                 'lastName' => $followerRow['followingUserLastName'],
                 'firstName' => $followerRow['followingUserFirstName'],
                 'profile_picture' => $followerRow['followingUserProfilePicture'],
@@ -29,12 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         }
         
         // !Getting all acounts the user is following
-        $query = "SELECT `followed_user_id` FROM followers WHERE `following_user_id`='$userId'";
+        $query = "SELECT `firstName` AS `followedUserFirstName`, `lastName` AS `followedUserLastName`, `major` AS `followedUserMajor`, `username` AS `followedUserUsername`, `profile_picture` AS `followedUserProfilePicture`, `followed_user_id` FROM followers LEFT JOIN users on followed_user_id=users.id WHERE `following_user_id`='$userId'";
         $followingResult = mysqli_query($link, $query);
         $followingCount = !empty($followingResult) ? $followingResult->num_rows :  0;
         $following = [];
         while ($followingRow = mysqli_fetch_assoc($followingResult)) {
-            array_push($following, $followingRow['followed_user_id']);
+            array_push($following, [
+                'id' => $followingRow['followed_user_id'],
+                'firstName' => $followingRow['followedUserFirstName'],
+                'lastName' => $followingRow['followedUserLastName'],
+                // 'firstName' => $followingRow['followingUserFirstName'],
+                'profile_picture' => $followingRow['followedUserProfilePicture'],
+                'major' => $followingRow['followedUserMajor'],
+                'username' => $followingRow['followedUserUsername'],
+            ]);
         }
         // !REFINE THIS (DO NOT SEND PASSWORD WITH OTHER DATA)
         $user = [

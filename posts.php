@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    verifyToken();
+    // verifyToken();
     $userId = $_POST['userId'];
     $caption = $_POST['caption'];
     $location = $_POST['location'];
@@ -86,10 +86,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         if (isset($_POST['taggedUsers'])) {
-            $tagUsers = $_POST['taggedUsers'];
+            $tagUsers = explode(',', $_POST['taggedUsers']);
             // echo json_encode($_POST['taggedUsers']);
             // return;
             foreach ($tagUsers as $key => $value) {
+                // echo json_encode($value);
+                // return;
                 $tagUserQuery = "INSERT INTO `postTags` (`post_id`, `user_id`, `tagged_userid`) VALUES (
             '".mysqli_real_escape_string( $link, $postId )."', 
             '".mysqli_real_escape_string( $link, $userId )."', 

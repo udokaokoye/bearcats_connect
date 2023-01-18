@@ -67,6 +67,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ]);
             }
 
+            $reactionquery = "SELECT `firstName`, `user_id`, `lastName`, `username` FROM reactions LEFT JOIN users on reactions.user_id=users.id WHERE `post_id`=$id";
+            $reactionresult = mysqli_query($link, $reactionquery);
+            $reactions = [];
+            while ($reactionrow = mysqli_fetch_assoc($reactionresult)) {
+                array_push($reactions, [
+                    'firstName' => $reactionrow['firstName'],
+                    'lastName' => $reactionrow['lastName'],
+                    'username' => $reactionrow['username'],
+                    'userId' => $reactionrow['user_id']
+                    ]);
+            }
+
                     // !SELECTING THE TAGGED USERS ON THAT POST
                 $tagUserQuery = "SELECT `firstName`, `lastName`, `username`, `tagged_userid` FROM postTags LEFT JOIN users on postTags.tagged_userid=users.id WHERE `post_id`=$id";
                 $tagUserResult = mysqli_query($link, $tagUserQuery);
@@ -104,6 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         'comments' => $comment,
                         'count' => count($comment)
                     ], 
+                    'reactions' => [
+                        'count' => count($reactions),
+                        'data' => $reactions
+                    ],
                     'tags' => $tags
                 ]
             );

@@ -1,6 +1,8 @@
 <?php
 // include './connection.php';
-include './jwt.php';
+// include './jwt.php';
+
+echo json_encode("hello");
 
 // $testArr = [1,2,3,5];
 // $following = implode("', '", $testArr);
@@ -24,4 +26,4 @@ include './jwt.php';
 
 // print_r($usersFeed);
 
-echo generateJwt("Hello");
+// echo generateJwt("Hello");

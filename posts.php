@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $postId = mysqli_fetch_array($result)[0];
 
         $serializedImages = serialize($allImages);
-        $serializedOrientations = serialize(($orientation));
+        $serializedOrientations = serialize($orientation);
 
         // ! PERFORM NEXT QUERY TO INSERT DATA INTO THE DATABASE.
         // foreach ($allImages as $key => $value) {

@@ -31,7 +31,10 @@ $query = "DELETE FROM post_media WHERE `post_id`='$pid'";
 
                 $query = "DELETE FROM postTags WHERE `post_id`='$pid'";
             if (mysqli_query($link, $query)) {
-            echo json_encode('SUCCESS');
+                $query = "DELETE FROM reactions WHERE `post_id`='$pid'";
+            if (mysqli_query($link, $query)) {
+                echo json_encode('SUCCESS');
+            }
             }
             }
         } else {
